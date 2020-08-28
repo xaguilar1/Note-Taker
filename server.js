@@ -19,6 +19,6 @@ app.get("./public/notes", (req, res) => {
     return res.json(db);
 })
 
-app.get("./public/index.html", (req, res) => {
-    return res.json()
-})
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
+});
