@@ -22,18 +22,18 @@ app.get("/api/notes", function (req, res) {
 app.post("/api/notes", function (req, res) {
     fs.readFile("./db/db.json", (err, data) => { 
         if (err) { throw err };
-        currentDatabase = JSON.parse(data)
-        uniqueId = uniqid() 
-        newRequest = req.body 
-        newRequest.id = uniqueId ;
-        currentDatabase.push(newRequest)
+        myDB = JSON.parse(data)
+        noteID = uniqid() 
+        userNotes = req.body 
+        userNotes.id = noteID ;
+        myDB.push(userNotes)
     
   
-        fs.writeFile("./db/db.json", JSON.stringify(currentDatabase), (err) => { // write new file containing the new incoming note
+        fs.writeFile("./db/db.json", JSON.stringify(myDB), (err) => { // write new file containing the new incoming note
           if (err) { throw err };
           console.log("successfully added new note")
-          console.log(currentDatabase)
-          res.json(currentDatabase);
+          console.log(myDB)
+          res.json(myDB);
         })
       })
 });
@@ -42,12 +42,12 @@ app.delete("/api/notes/:id", function (req, res) {
     const requestId = req.params.id;
     fs.readFile("./db/db.json", (err, data) => { 
       if (err) { throw err };
-      const currentArray = JSON.parse(data) 
-      const newArray = currentArray.filter((note)=> {return note.id !== requestId}) 
-      fs.writeFile("./db/db.json", JSON.stringify(newArray), (err) => { 
+      const oldNotes = JSON.parse(data) 
+      const newNotes = oldNotes.filter((note)=> {return note.id !== requestId}) 
+      fs.writeFile("./db/db.json", JSON.stringify(newNotes), (err) => { 
         if (err) { throw err };
-        res.send(newArray);
-        console.log("successfully deleted note")
+        res.send(newNotes);
+        console.log("Deleted Notes!!!")
             })
     })
   });
@@ -64,20 +64,4 @@ app.get("/notes", function(req, res) {
 app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "./public/index.html"));
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
